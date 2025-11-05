@@ -1,16 +1,16 @@
-import React from 'react'
-import Welcome from '../common/dashboard/welcome'
-import Status from '../common/dashboard/status'
-import Try from '../common/dashboard/try'
+import React from "react";
+import Welcome from "../common/dashboard/welcome";
+import Status from "../common/dashboard/status";
+import Notifications from "../common/dashboard/notifications";
 
 const dashboardPage = () => {
   return (
     <>
-            <Welcome/>
-            <Status/>
-            <Try/>
+      <Welcome />
+      <Status />
+      <Notifications />
     </>
-  )
-}
+  );
+};
 
-export default dashboardPage
+export default dashboardPage;

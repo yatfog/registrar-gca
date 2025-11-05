@@ -1,61 +1,113 @@
-import React, { useState } from 'react';
-import Inbox from '../common/application/inbox/inbox.Jsx';
-import Screening from '../common/application/screening/screening';
+import React, { useState, useEffect } from "react";
+import Inbox from "../common/application/inbox/inbox.jsx";
+import Screening from "../common/application/screening/screening.jsx";
+import Review from "../common/application/review/review.jsx";
 
-
-const SettingsPage = () => {
-  const [activeTab, setActiveTab] = useState('Appearances');
+const ApplicantManagement = () => {
+  const [activeTab, setActiveTab] = useState("Inbox");
+  const [animateTabs, setAnimateTabs] = useState(false);
 
   const tabs = [
-    { id: 'Notifications', label: 'Application Inbox', tooltipText: 'Manage your notifications' },
-    { id: 'Appearances', label: 'Application Screening', tooltipText: 'Customize the look and feel' },
-    { id: 'Security', label: 'Sectioning And Final Review', tooltipText: 'Manage your account security' },
+    {
+      id: "Inbox",
+      label: "Application Inbox",
+      tooltipText: "View and manage pending applications",
+    },
+    {
+      id: "Screening",
+      label: "Application Screening",
+      tooltipText: "Process and screen applicant details",
+    },
+    {
+      id: "Review",
+      label: "Sectioning & Final Review",
+      tooltipText: "Assign and finalize accepted applicants",
+    },
   ];
+
+  useEffect(() => {
+    // Trigger animation after component mount
+    setAnimateTabs(true);
+  }, []);
 
   const renderContent = () => {
     switch (activeTab) {
-      case 'Notifications':
-        return <Inbox/>;
-      case 'Appearances':
-        return <Screening/>;
-      case 'Security':
-        return <Inbox/>;
+      case "Inbox":
+        return <Inbox />;
+      case "Screening":
+        return <Screening />;
+      case "Review":
+        return <Review />;
       default:
-        return <Screening/>;
+        return <Inbox />;
     }
   };
 
   return (
-    <>
-      <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-6">
-        Settings
-      </h1>
+    <div className="p-0">
+      {/* Inline animation keyframes */}
+      <style>
+        {`
+          @keyframes slideDown {
+            0% {
+              transform: translateY(-20px);
+              opacity: 0;
+            }
+            100% {
+              transform: translateY(0);
+              opacity: 1;
+            }
+          }
+          .animate-slideDown {
+            animation: slideDown 0.6s ease-out forwards;
+          }
+        `}
+      </style>
 
-      <div className="flex items-center gap-2 mb-6">
-        {tabs.map((tab) => (
-          <div key={tab.id} className="relative group">
-            <button
-              onClick={() => setActiveTab(tab.id)}
-              className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors duration-300 ${
-                activeTab === tab.id
-                  ? 'bg-amber-400 text-stone-900'
-                  : 'bg-white dark:bg-slate-800 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700'
-              }`}
+      {/* Container with card style */}
+      <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-md w-full transition-colors duration-300">
+        {/* Tabs with animation */}
+        <div className="flex gap-8 mb-6 relative">
+          {/* Continuous thin line */}
+          <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gray-300 dark:bg-gray-600"></div>
+
+          {tabs.map((tab) => (
+            <div
+              key={tab.id}
+              className={`flex flex-col items-center relative group transition-all duration-700
+                ${animateTabs ? "animate-slideDown" : "opacity-0"}
+              `}
             >
-              {tab.label}
-            </button>
-            <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-gray-900 text-white text-xs font-bold rounded-md px-2 py-1 opacity-0 scale-0 group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 ease-in-out whitespace-nowrap z-10">
-              {tab.tooltipText}
-            </span>
-          </div>
-        ))}
-      </div>
+              <button
+                onClick={() => setActiveTab(tab.id)}
+                className={`w-full text-sm font-semibold py-2 transition-colors duration-300
+                  ${
+                    activeTab === tab.id
+                      ? "text-blue-600 border-b-2 border-blue-600"
+                      : "text-gray-700 dark:text-gray-200"
+                  }`}
+              >
+                {tab.label}
+              </button>
 
-      <div className="bg-white dark:bg-slate-800 border border-gray-100 dark:border-slate-700 rounded-2xl p-6 md:p-8 shadow-md">
-        {renderContent()}
+              {/* Tooltip */}
+              <span
+                className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 
+                bg-gray-900 text-white text-xs font-semibold rounded-md px-2 py-1 
+                opacity-0 scale-0 group-hover:opacity-100 group-hover:scale-100 
+                transition-all duration-300 ease-in-out whitespace-nowrap z-10"
+              >
+                {tab.tooltipText}
+              </span>
+            </div>
+          ))}
+        </div>
+
+        {/* Render tab content */}
+        <div className="mt-4">{renderContent()}</div>
       </div>
-    </>
+    </div>
   );
 };
 
-export default SettingsPage;
+export default ApplicantManagement;
